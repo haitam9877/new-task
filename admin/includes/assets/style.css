@@ -1,0 +1,10 @@
+
+.card{
+    background-color: #5C7285;
+    width: 100% !important;
+}
+.icon{
+    display: flex;
+    justify-content: center;
+    
+}
