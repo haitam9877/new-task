@@ -6,6 +6,25 @@ include 'includes/template/navbar.php';
 
 
 
+$con  = include 'includes/db/db.php';
+
+
+
+$stm = $conn->prepare('SELECT * FROM users');
+$stm->execute();
+$users = $stm->rowCount();
+
+$stm = $conn->prepare('SELECT * FROM categories');
+$stm->execute();
+$categories = $stm->rowCount();
+
+$stm = $conn->prepare('SELECT * FROM posts');
+$stm->execute();
+$posts = $stm->rowCount();
+
+$stm = $conn->prepare('SELECT * FROM comments');
+$stm->execute();
+$comments = $stm->rowCount();
 
 ?>
 
@@ -21,7 +40,7 @@ include 'includes/template/navbar.php';
                 <div class="card p-3  text-white" style="width: 18rem;">
 
                     <div class="card-body text-center">
-                        <h5 class="card-title">25</h5>
+                        <h5 class="card-title"><?php echo $users ?></h5>
 
                         <h4>Users</h4>
                     </div>
@@ -34,7 +53,7 @@ include 'includes/template/navbar.php';
                 <div class="card p-3  text-white" style="width: 18rem;">
 
                     <div class="card-body text-center">
-                        <h5 class="card-title">25</h5>
+                        <h5 class="card-title"><?php echo $categories ?></h5>
 
                         <h4>categories</h4>
                     </div>
@@ -47,7 +66,7 @@ include 'includes/template/navbar.php';
                 <div class="card p-3  text-white" style="width: 18rem;">
 
                     <div class="card-body text-center">
-                        <h5 class="card-title">25</h5>
+                        <h5 class="card-title"><?php echo $posts ?></h5>
 
                         <h4>posts</h4>
                     </div>
@@ -60,7 +79,7 @@ include 'includes/template/navbar.php';
                 <div class="card p-3  text-white" style="width: 18rem;">
 
                     <div class="card-body text-center">
-                        <h5 class="card-title">25</h5>
+                        <h5 class="card-title"><?php echo $comments ?></h5>
 
                         <h4>Comments</h4>
                     </div>
