@@ -1,10 +1,12 @@
-
-.card{
-    background-color: #5C7285;
-    width: 100% !important;
+#pry-color {
+  background-color: #f1f1f1 !important;
 }
-.icon{
-    display: flex;
-    justify-content: center;
-    
+
+.card {
+  background-color: #5c7285;
+  width: 100% !important;
+}
+.icon {
+  display: flex;
+  justify-content: center;
 }

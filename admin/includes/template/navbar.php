@@ -10,7 +10,7 @@
     <div class="collapse navbar-collapse flex-grow-0" id="navbarNavDropdown">
       <ul class="navbar-nav  ">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">users</a>
+          <a class="nav-link active" aria-current="page" href="users.php">users</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">categories</a>

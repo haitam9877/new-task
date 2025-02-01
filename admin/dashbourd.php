@@ -6,7 +6,6 @@ include 'includes/template/navbar.php';
 
 
 
-$con  = include 'includes/db/db.php';
 
 
 
