@@ -1,5 +1,5 @@
-#pry-color {
-  background-color: #f1f1f1 !important;
+body {
+  background-color: rgba(238, 238, 238, 0.444) !important;
 }
 
 .card {
