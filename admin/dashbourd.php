@@ -1,8 +1,18 @@
 <?php
 
-include 'init.php';
 
-include 'includes/template/navbar.php';
+
+session_start();
+
+
+if(isset($_SESSION["admin"])){
+
+
+
+
+    include 'init.php';
+
+    include 'includes/template/navbar.php';
 
 
 
@@ -98,4 +108,9 @@ $comments = $stm->rowCount();
 <?php
 
 include 'includes/template/footer.php';
+
+}else{
+   header("Location:login.php");
+   exit();
+}
 ?>

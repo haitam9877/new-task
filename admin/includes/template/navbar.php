@@ -27,6 +27,7 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <li><a class="dropdown-item" href="#">Admin</a></li>
+            <li><a class="dropdown-item" href="logout.php">Logout</a></li>
            
           </ul>
         </li>

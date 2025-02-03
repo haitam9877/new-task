@@ -3,6 +3,10 @@
 session_start();
 
 
+if(isset($_SESSION["admin"])){
+    header("Location:dashbourd.php");
+    exit();
+}
 include 'init.php';
 
 
@@ -24,12 +28,23 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     if($checkRow > 0){
 
-        header('refresh:1;url=dashbourd.php');
-        exit();
+       
+        $userData = $check->fetch();
+
+        if($userData["role"] == "admin"){
+            $_SESSION["admin"] = $userData["username"];
+
+            header("Location:dashbourd.php");
+            exit();
+        }else{
+            echo"the user is not admin";
+        }
+       
+
        
 
     }else{
-        echo "no";
+        echo"the user is not exitst";
     }
 
     
