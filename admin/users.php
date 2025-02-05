@@ -7,6 +7,7 @@ include 'includes/template/navbar.php';
 
 
 
+
 // check Page
 
 if(isset($_GET['page'])){
@@ -29,14 +30,11 @@ $usersCont = $sit->rowCount();
 
 
 
+
 ?>
 
 
-<?php if($page == "All"){ 
-  
-  
-  
-  ?>
+<?php if($page == "All"){ ?>
 
 <div class="container-teble  p-4">
 
@@ -48,9 +46,13 @@ $usersCont = $sit->rowCount();
   <div class="container mt-2">
 
   <div class="add-user mt-4 mb-4 ">
-    <a href="?page=addUser" class="btn btn-primary">Add User</a>
+    <a href="?page=addUser" class="btn btn-primary">Add New User</a>
   </div>
 
+ 
+  
+
+  </div>
     <h3 >
       Users <span class="badge bg-secondary"><?php echo $usersCont; ?></span>
     </h3>
@@ -104,11 +106,11 @@ $usersCont = $sit->rowCount();
 
                 <div class="contr">
 
-                  <a type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  <a type="button" class="btn btn-secondary">
                     <i class="fa-solid fa-circle-info"></i>
                   </a>
 
-                  <a href="#" class="btn btn-danger">
+                  <a href="?page=delete&userid=<?php echo $user['id']; ?>" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     <i class="fa-solid fa-trash"></i>
                   </a>
                 </div>
@@ -131,7 +133,7 @@ $usersCont = $sit->rowCount();
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel"> you want delete for ?></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -145,12 +147,7 @@ $usersCont = $sit->rowCount();
   </div>
 </div>
 
-<?php }elseif($page == "addUser"){ 
-  
- 
-  
-  
-  ?>
+<?php }elseif($page == "addUser"){ ?>
 
   <div class="container">
     <h3  class=" mt-5 mb-5">Regster</h3>
@@ -191,7 +188,7 @@ $usersCont = $sit->rowCount();
 
 
 
-  <?php }elseif($page == "seveUser") {
+<?php }elseif($page == "seveUser") {
 
 
 
@@ -236,18 +233,17 @@ $usersCont = $sit->rowCount();
 
           $sita = $conn->prepare("INSERT INTO users (username, email, password, status, role, created_at) 
         VALUES (:zusername, :zemail, :zpassword, :zstatus, :zrole, NOW())");
-          $sita->execute([
+          $sita->execute(array(
             ':zusername' => $username,
             ':zemail'    => $email,
-            ':zpassword' => $password,
+            ':zpassword' => sha1($password),
             ':zstatus'   => '0',
-            ':zrole'     => 'admin'
-        ]);
+            ':zrole'     => $role
+          ));
 
           if($sita->rowCount() > 0){
-
-
-            echo "you have ben sassisfoly";
+  
+            $good = "goozefzefzefzed";
             header('Location:users.php');
             exit();
 
@@ -255,12 +251,34 @@ $usersCont = $sit->rowCount();
 
 
         }else{
-          echo  $emailErr;
+         
+            
+          
         }
   
     }
   }
+ 
+}elseif($page == "delete"){
 
+  if(isset($_GET['userid']) && is_numeric($_GET['userid'])){
+    $userid = intval($_GET['userid']);
+  }else{
+    $userid = "";
+  }
+
+  $sit = $conn->prepare("SELECT * FROM users WHERE id = ? ");
+  $sit->execute(array($userid));
+
+
+  $rows = $sit->rowCount();
+
+  if($rows > 0){
+
+    echo $userid;
+  }
+
+}
   ?>
 
 
@@ -268,6 +286,6 @@ $usersCont = $sit->rowCount();
 
   
 <?php
-  }
+
 include 'includes/template/footer.php';
 ?>
