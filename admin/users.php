@@ -1,7 +1,12 @@
 <?php
 
+session_start();
+
 
 include 'init.php';
+
+
+if(isset($_SESSION['admin'])){
 
 include 'includes/template/navbar.php';
 
@@ -52,7 +57,7 @@ $usersCont = $sit->rowCount();
  
   
 
-  </div>
+ 
     <h3 >
       Users <span class="badge bg-secondary"><?php echo $usersCont; ?></span>
     </h3>
@@ -110,7 +115,7 @@ $usersCont = $sit->rowCount();
                     <i class="fa-solid fa-circle-info"></i>
                   </a>
 
-                  <a href="?page=delete&userid=<?php echo $user['id']; ?>" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  <a href="?page=delete&userid=<?php echo $user['id']; ?>" class="btn btn-danger"  data-bs-toggle="modal" data-bs-target="#exampleModal">
                     <i class="fa-solid fa-trash"></i>
                   </a>
                 </div>
@@ -133,15 +138,13 @@ $usersCont = $sit->rowCount();
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"> you want delete for ?></h5>
+        <h5 class="modal-title" id="exampleModalLabel"> you want delete this user ?</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        ...
-      </div>
+    
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <a href="?page=delete&userid=<?php echo $user['id'];?>" type="button" class="btn btn-primary"  >Yes</a>
       </div>
     </div>
   </div>
@@ -275,7 +278,15 @@ $usersCont = $sit->rowCount();
 
   if($rows > 0){
 
-    echo $userid;
+    $deletesit = $conn->prepare('DELETE  FROM users WHERE id = ?');
+    $deletesit->execute(array($userid));
+
+
+    if($deletesit->rowCount() > 0){
+      echo "the user is deleted sacss";
+      header("Location:users.php");
+      exit();
+    }
   }
 
 }
@@ -288,4 +299,7 @@ $usersCont = $sit->rowCount();
 <?php
 
 include 'includes/template/footer.php';
+}else{
+  header('Location:login.php');
+}
 ?>

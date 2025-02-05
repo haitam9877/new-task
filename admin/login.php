@@ -6,6 +6,8 @@ session_start();
 if(isset($_SESSION["admin"])){
     header("Location:dashbourd.php");
     exit();
+}else{
+    echo "sory";
 }
 include 'init.php';
 
