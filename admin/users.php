@@ -55,8 +55,26 @@ $usersCont = $sit->rowCount();
   </div>
 
  
-  
+  <?php if(isset($_SESSION['message'])){
 
+ 
+
+ 
+  ?>
+  
+  <div class="alert alert-success" role="alert">
+  <?php echo $_SESSION['message'] ; ?>
+</div>
+
+
+  <?php 
+
+    
+      unset($_SESSION['message']);
+    
+    }
+  
+  ?>
  
     <h3 >
       Users <span class="badge bg-secondary"><?php echo $usersCont; ?></span>
@@ -115,7 +133,7 @@ $usersCont = $sit->rowCount();
                     <i class="fa-solid fa-circle-info"></i>
                   </a>
 
-                  <a href="?page=delete&userid=<?php echo $user['id']; ?>" class="btn btn-danger"  data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  <a  class="btn btn-danger btn-delete" data-id="<?php echo $user["id"]; ?>"  data-bs-toggle="modal" data-bs-target="#exampleModal">
                     <i class="fa-solid fa-trash"></i>
                   </a>
                 </div>
@@ -144,7 +162,7 @@ $usersCont = $sit->rowCount();
     
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <a href="?page=delete&userid=<?php echo $user['id'];?>" type="button" class="btn btn-primary"  >Yes</a>
+        <a type="button" class="btn btn-primary "  id="confirm-delete" >Yes</a>
       </div>
     </div>
   </div>
@@ -283,9 +301,15 @@ $usersCont = $sit->rowCount();
 
 
     if($deletesit->rowCount() > 0){
-      echo "the user is deleted sacss";
+     
+      $_SESSION['message'] = "Deleted successfully";
+     
+
       header("Location:users.php");
       exit();
+    }else{
+      $_SESSION['message'] = "";
+
     }
   }
 
@@ -300,6 +324,8 @@ $usersCont = $sit->rowCount();
 
 include 'includes/template/footer.php';
 }else{
+unset($_SESSION['admin']);
+  
   header('Location:login.php');
 }
 ?>
