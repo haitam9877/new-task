@@ -35,6 +35,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
         if($userData["role"] == "admin"){
             $_SESSION["admin"] = $userData["username"];
+            $_SESSION["userid"] = $userData["id"];
 
             header("Location:dashbourd.php");
             exit();

@@ -5,7 +5,7 @@
 session_start();
 
 
-if(isset($_SESSION["admin"])){
+if(isset($_SESSION["admin"] ) && isset($_SESSION['userid'])){
 
 
 
@@ -34,6 +34,9 @@ $posts = $stm->rowCount();
 $stm = $conn->prepare('SELECT * FROM comments');
 $stm->execute();
 $comments = $stm->rowCount();
+
+
+
 
 ?>
 
@@ -110,7 +113,10 @@ $comments = $stm->rowCount();
 include 'includes/template/footer.php';
 
 }else{
-   header("Location:login.php");
-   exit();
+
+   
+      header("Location: login.php");
+      exit();
+ 
 }
 ?>

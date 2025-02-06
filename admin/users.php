@@ -129,11 +129,11 @@ $usersCont = $sit->rowCount();
 
                 <div class="contr">
 
-                  <a type="button" class="btn btn-secondary">
+                  <a type="button" class="btn btn-secondary btn-detilis" data-bs-toggle="modal" data-bs-target="#modelDitelis" data-id="<?php echo $user["id"]; ?>">
                     <i class="fa-solid fa-circle-info"></i>
                   </a>
 
-                  <a  class="btn btn-danger btn-delete" data-id="<?php echo $user["id"]; ?>"  data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  <a  class="btn btn-danger btn-delete" data-id="<?php echo $user["id"]; ?>"  data-bs-toggle="modal" data-bs-target="#modelDelete">
                     <i class="fa-solid fa-trash"></i>
                   </a>
                 </div>
@@ -151,8 +151,8 @@ $usersCont = $sit->rowCount();
   </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Modal Delete -->
+<div class="modal fade" id="modelDelete" tabindex="-1" aria-labelledby="modelDelete" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -163,6 +163,24 @@ $usersCont = $sit->rowCount();
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <a type="button" class="btn btn-primary "  id="confirm-delete" >Yes</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal ditils-->
+<div class="modal fade" id="modelDitelis" tabindex="-1" aria-labelledby="modelDitelis" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"> you want delete this user ?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+    
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a type="button" class="btn btn-primary "   >Yes</a>
       </div>
     </div>
   </div>
@@ -288,6 +306,8 @@ $usersCont = $sit->rowCount();
     $userid = "";
   }
 
+
+
   $sit = $conn->prepare("SELECT * FROM users WHERE id = ? ");
   $sit->execute(array($userid));
 
@@ -300,17 +320,26 @@ $usersCont = $sit->rowCount();
     $deletesit->execute(array($userid));
 
 
+
     if($deletesit->rowCount() > 0){
+
+      if ($_SESSION['userid'] == $userid) {
+        // إلغاء الجلسة بالكامل إذا كان المستخدم هو نفسه
+        session_unset();  // إلغاء كل المتغيرات الجلسة
+        session_destroy();  // تدمير الجلسة
+        header("Location: login.php");
+        exit();
+    }
      
       $_SESSION['message'] = "Deleted successfully";
-     
-
       header("Location:users.php");
       exit();
     }else{
       $_SESSION['message'] = "";
 
     }
+
+   
   }
 
 }
