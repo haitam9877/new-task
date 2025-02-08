@@ -7,25 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const userid = button.getAttribute("data-id");
 
       confirmDelete.setAttribute("href", `?page=delete&userid=${userid}`);
-      console.log("userid")
+      console.log("userid");
     });
   });
 });
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const detilisButtons = document.querySelectorAll(".btn-detilis");
-  
-
-  detilisButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const userid = button.getAttribute("data-id");
-
-      console.log(userid)
-    });
-  });
-});
-
-
-

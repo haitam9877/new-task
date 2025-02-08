@@ -129,7 +129,7 @@ $usersCont = $sit->rowCount();
 
                 <div class="contr">
 
-                  <a type="button" class="btn btn-secondary btn-detilis" data-bs-toggle="modal" data-bs-target="#modelDitelis" data-id="<?php echo $user["id"]; ?>">
+                  <a   class="btn btn-secondary btn-detilis" href="?page=show&user_id=<?php echo $user["id"]; ?>"  data-bs-toggle="modal" data-bs-target="#exampleModal" >
                     <i class="fa-solid fa-circle-info"></i>
                   </a>
 
@@ -151,7 +151,9 @@ $usersCont = $sit->rowCount();
   </div>
 </div>
 
-<!-- Modal Delete -->
+
+
+<!-- Modal Delete
 <div class="modal fade" id="modelDelete" tabindex="-1" aria-labelledby="modelDelete" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -166,25 +168,11 @@ $usersCont = $sit->rowCount();
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 
-<!-- Modal ditils-->
-<div class="modal fade" id="modelDitelis" tabindex="-1" aria-labelledby="modelDitelis" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"> you want delete this user ?</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-    
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <a type="button" class="btn btn-primary "   >Yes</a>
-      </div>
-    </div>
-  </div>
-</div>
+
+
 
 <?php }elseif($page == "addUser"){ ?>
 
@@ -342,8 +330,58 @@ $usersCont = $sit->rowCount();
    
   }
 
+}elseif($page == "show"){
+
+  if(isset($_GET['user_id'])){
+
+    $user_id = intval($_GET['user_id']);
+
+    $siti = $conn->prepare("SELECT * FROM users WHERE id = ?");
+    $siti->execute(array($user_id));
+    $usersdata = $siti->fetchAll();
+
+  }
 }
   ?>
+
+
+<!-- Modal -->
+<div class="modal fade show " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+    
+      <?php 
+      
+      if($siti->rowCount() > 0){
+
+        foreach($userdata as $usersdata){
+
+          ?>
+
+
+          <p><?php echo $userdata['username']; ?></p>
+
+
+          <?php
+        }
+      }
+      
+      
+      ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+              
 
 
 
