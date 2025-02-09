@@ -35,11 +35,35 @@ $usersCont = $sit->rowCount();
 
 
 
+// if(isset($_GET['user_id'])){
+
+//   $id = intval($_GET['user_id']);
+
+  
+
+//   $showData = $conn->prepare("SELECT * FROM users WHERE id = ?");
+//   $showData->execute(array($id));
+
+//   $showUser = $showData->fetch();
+
+// }
+
+
+if(isset($_POST['data_user'])){
+  
+    $id = intval($_GET['user_id']);
+    $showData = $conn->prepare("SELECT * FROM users WHERE id = ?");
+    $showData->execute(array($id));
+    $showUser = $showData->fetch();
+}
+
+
 
 ?>
 
 
 <?php if($page == "All"){ ?>
+
 
 <div class="container-teble  p-4">
 
@@ -129,19 +153,19 @@ $usersCont = $sit->rowCount();
 
                 <div class="contr">
 
-                <form method="POST" action=""<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>"">
-                  <input type="hidden" name="item_id" value="<?php echo $user["id"]; ?>" > <!-- هذا هو الـ ID الذي تريد تمريره -->
-                  <button type="submit" name="open_model"   class="btn btn-secondary btn-detilis"  data-bs-toggle="modal" data-bs-target="#modelDelete">
-                  
+              
+                  <a data-userid="<?php echo $user["id"]; ?>""  class="btn btn-secondary btn-detilis" data-bs-toggle="modal" data-bs-target="#exampleModal" >
                   <i class="fa-solid fa-trash"></i>
-                  </button>
+                  </a>
                   
-                </form>
+                
                  
 
-                  <a  class="btn btn-danger btn-delete" data-id="<?php echo $user["id"]; ?>"  data-bs-toggle="modal" data-bs-target="#modelDelete">
+                  <!-- <a  class="btn btn-danger btn-delete" data-id="<?php echo $user["id"]; ?>"  data-bs-toggle="modal" data-bs-target="#modelDelete">
                     <i class="fa-solid fa-trash"></i>
-                  </a>
+
+                    
+                  </a> -->
                 </div>
 
               </td>
@@ -159,16 +183,6 @@ $usersCont = $sit->rowCount();
 
 
 
-<?php 
-
-if (isset($_POST['open_model'])) {
-  $item_id = intval($_POST['item_id']);
- 
-  echo $item_id;
-  // يمكنك هنا جلب البيانات من قاعدة البيانات أو تنفيذ أي عملية أخرى
-}
-
-?>
 
 <!-- Modal Delete
 <div class="modal fade" id="modelDelete" tabindex="-1" aria-labelledby="modelDelete" aria-hidden="true">
@@ -189,15 +203,20 @@ if (isset($_POST['open_model'])) {
 
 
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModal" aria-hidden="true">
+<div class="modal fade show" id="exampleModal" tabindex="-1" aria-labelledby="exampleModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"> you want delete this user ?</h5>
+        <h5 class="modal-title" id="exampleModalLabel"> </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
     
+      <form method="post" action="">
+      <input type="hidden" name="data_user" id="show_id">
+
+      </form>
   
+      <p><?php echo $showUser["id"]; ?></p>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <a type="button" class="btn btn-primary "   >Yes</a>
@@ -208,7 +227,13 @@ if (isset($_POST['open_model'])) {
 
 
 
-<?php }elseif($page == "addUser"){ ?>
+
+<?php 
+
+
+
+
+}elseif($page == "addUser"){ ?>
 
   <div class="container">
     <h3  class=" mt-5 mb-5">Regster</h3>
