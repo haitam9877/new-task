@@ -49,13 +49,7 @@ $usersCont = $sit->rowCount();
 // }
 
 
-if(isset($_POST['data_user'])){
-  
-    $id = intval($_GET['user_id']);
-    $showData = $conn->prepare("SELECT * FROM users WHERE id = ?");
-    $showData->execute(array($id));
-    $showUser = $showData->fetch();
-}
+
 
 
 
@@ -154,7 +148,7 @@ if(isset($_POST['data_user'])){
                 <div class="contr">
 
               
-                  <a data-userid="<?php echo $user["id"]; ?>""  class="btn btn-secondary btn-detilis" data-bs-toggle="modal" data-bs-target="#exampleModal" >
+                  <a data-userid="<?php echo $user["id"]; ?>""  class="btn btn-secondary btn-detilis"  >
                   <i class="fa-solid fa-trash"></i>
                   </a>
                   
@@ -182,7 +176,30 @@ if(isset($_POST['data_user'])){
 </div>
 
 
+<div class="modal fade show" id="detailsModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"> </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+    
+      
+      <input type="hidden" name="data_user" id="show_id">
 
+      <div class="modal-body" id="userDetails">
+        <!-- سيتم عرض البيانات هنا -->
+      </div>
+    
+  
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a type="button" class="btn btn-primary "   >Yes</a>
+      </div>
+    </div>
+  </div>
+</div> 
 
 <!-- Modal Delete
 <div class="modal fade" id="modelDelete" tabindex="-1" aria-labelledby="modelDelete" aria-hidden="true">
@@ -200,31 +217,6 @@ if(isset($_POST['data_user'])){
     </div>
   </div>
 </div> -->
-
-
-
-<div class="modal fade show" id="exampleModal" tabindex="-1" aria-labelledby="exampleModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"> </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-    
-      <form method="post" action="">
-      <input type="hidden" name="data_user" id="show_id">
-
-      </form>
-  
-      <p><?php echo $showUser["id"]; ?></p>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <a type="button" class="btn btn-primary "   >Yes</a>
-      </div>
-    </div>
-  </div>
-</div> 
-
 
 
 
