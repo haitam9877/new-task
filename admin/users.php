@@ -149,17 +149,19 @@ $usersCont = $sit->rowCount();
 
               
                   <a data-userid="<?php echo $user["id"]; ?>""  class="btn btn-secondary btn-detilis"  >
-                  <i class="fa-solid fa-trash"></i>
+                  <i class="fa-solid fa-circle-info"></i>
                   </a>
                   
                 
                  
 
-                  <!-- <a  class="btn btn-danger btn-delete" data-id="<?php echo $user["id"]; ?>"  data-bs-toggle="modal" data-bs-target="#modelDelete">
+                  <a  class="btn btn-danger btn-delete" data-id="<?php echo $user["id"]; ?>"  data-bs-toggle="modal" data-bs-target="#modelDelete">
                     <i class="fa-solid fa-trash"></i>
+                  </a>
 
-                    
-                  </a> -->
+                  <a  class="btn btn-primary " href="?page=edit&userid=<?php echo $user["id"]; ?>" >
+                  <i class="fa-solid fa-pen-to-square"></i>
+                  </a>
                 </div>
 
               </td>
@@ -193,15 +195,12 @@ $usersCont = $sit->rowCount();
     
   
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <a type="button" class="btn btn-primary "   >Yes</a>
-      </div>
+    
     </div>
   </div>
 </div> 
 
-<!-- Modal Delete
+<!-- Modal Delete -->
 <div class="modal fade" id="modelDelete" tabindex="-1" aria-labelledby="modelDelete" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -216,7 +215,7 @@ $usersCont = $sit->rowCount();
       </div>
     </div>
   </div>
-</div> -->
+</div>
 
 
 
@@ -321,8 +320,8 @@ $usersCont = $sit->rowCount();
 
           if($sita->rowCount() > 0){
   
-            $good = "goozefzefzefzed";
-            header('Location:users.php');
+            $_SESSION['message'] = "Add user successfully";
+            header("Location:users.php");
             exit();
 
           } 
@@ -383,11 +382,59 @@ $usersCont = $sit->rowCount();
 
 
 
-}
+}elseif($page == "edit") {
+
+  if(isset($_GET["userid"])){
+    $id = intval($_GET["userid"]);
+
+    $data = $conn->prepare("SELECT * FROM users WHERE id = ?");
+    $data->execute(array($id));
+
+    $datauser = $data->fetch();
+  }
   ?>
 
+<div class="container">
+    <h3  class=" mt-5 mb-5">Edit User</h3>
+    <div class=" w-50 ">
+            <form method="post" action="?page=seveEdit">
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Username</label>
+                    <input type="text" class="form-control" name="username" value="<?php echo $datauser["username"];?>">
+               
+                 </div>
 
+                 <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Email address</label>
+                    <input type="text" class="form-control" name="email" value="<?php echo $datauser["email"];?>">
+               
+                 </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password">
+                </div>
 
+                <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Role</label>
+
+                <select class="form-select" aria-label="Default select example" class="w-20" name="role" autofocus>
+                  <option selected>Choose</option>
+                  <option value="admin"  <?php if($datauser["role"] == "admin" ) echo 'selected' ?>>Admin</option>
+                  <option value="user " <?php if($datauser["role"] == "user" ) echo 'selected' ?>>User</option>
+                 
+                </select>
+                </div>
+               
+            <button type="submit" class="btn btn-primary" name="edit-user">Seve</button>
+        </form>
+    </div>
+</div>
+
+<?php
+}elseif($page == "edit-user"){
+  
+}
+?>
 
 
   
