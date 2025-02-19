@@ -386,12 +386,14 @@ $usersCont = $sit->rowCount();
 
   if(isset($_GET["userid"])){
     $id = intval($_GET["userid"]);
+  }else{
+    $id = "";
+  }
 
     $data = $conn->prepare("SELECT * FROM users WHERE id = ?");
     $data->execute(array($id));
 
     $datauser = $data->fetch();
-  }
   ?>
 
 <div class="container">
@@ -400,29 +402,38 @@ $usersCont = $sit->rowCount();
             <form method="post" action="?page=seveEdit">
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Username</label>
-                    <input type="text" class="form-control" name="username" value="<?php echo $datauser["username"];?>">
+                    <input type="text" class="form-control" name="username_edit" value="<?php echo $datauser["username"];?>">
                
                  </div>
 
                  <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Email address</label>
-                    <input type="text" class="form-control" name="email" value="<?php echo $datauser["email"];?>">
+                    <input type="text" class="form-control" name="email__edit" value="<?php echo $datauser["email"];?>">
                
                  </div>
-                <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Password</label>
-                    <input type="password" class="form-control" name="password">
-                </div>
+              
 
                 <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Role</label>
 
-                <select class="form-select" aria-label="Default select example" class="w-20" name="role" autofocus>
+                <select class="form-select" aria-label="Default select example" class="w-20" name="role_edit" autofocus>
                   <option selected>Choose</option>
                   <option value="admin"  <?php if($datauser["role"] == "admin" ) echo 'selected' ?>>Admin</option>
                   <option value="user " <?php if($datauser["role"] == "user" ) echo 'selected' ?>>User</option>
                  
                 </select>
+                </div>
+
+                <input type="hidden" name="id" value="<?php echo $datauser["id"]; ?>">
+
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">New Password</label>
+                    <input type="password" class="form-control" name="new_password">
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Password Confirm</label>
+                    <input type="password" class="form-control" name="password_confirm">
                 </div>
                
             <button type="submit" class="btn btn-primary" name="edit-user">Seve</button>
@@ -431,8 +442,59 @@ $usersCont = $sit->rowCount();
 </div>
 
 <?php
-}elseif($page == "edit-user"){
+}elseif($page == "seveEdit"){
   
+  
+
+  if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    if(isset($_POST["edit-user"])){
+
+      
+        $id =  $_POST["id"];
+      
+
+      $username = $_POST["username_edit"];
+      $email = $_POST["email__edit"];
+      $role = $_POST["role_edit"];
+      $newPassword = $_POST["new_password"];
+      $confirmPassword = $_POST["password_confirm"];
+
+      $hashPassword = sha1($newPassword);
+
+
+      $getPassword = $conn->prepare("SELECT password FROM users WHERE id = ?");
+      $getPassword->execute(array($id));
+      
+
+      $row = $getPassword->fetch();
+    
+      $oldPassword = $row["paasword"];
+
+      $passwordFinal = !empty($newPassword) ? htmlspecialchars(sha1($newPassword),ENT_QUOTES , "utf-8") : $oldPassword;
+  
+
+      $updete = $conn->prepare("UPDATE users SET username = ? , email = ? , password = ? , role = ? , updetd_at = now() WHERE id = ?");
+
+      $updete->execute(array( $username,$email,$passwordFinal,$role,$id));
+
+      $updeteCount = $updete->rowCount();
+
+
+      if($updeteCount > 0){
+
+        header("Location:users.php");
+        exit();
+      }
+
+    }
+  
+
+    
+
+  
+
+  }
 }
 ?>
 
