@@ -13,7 +13,7 @@
           <a class="nav-link active" aria-current="page" href="users.php">users</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">categories</a>
+          <a class="nav-link" href="categories.php">categories</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">posts</a>
