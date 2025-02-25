@@ -391,21 +391,22 @@ $categoriesCont = $sit->rowCount();
             <form method="post" action="?page=seveEdit">
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Title</label>
-                    <input type="text" class="form-control" name="title" value="<?php echo $datauser["title"];?>">
+                    <input type="text" class="form-control" name="title_edit" value="<?php echo $datauser["title"];?>">
                
                  </div>
 
                  <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">descrption</label>
-                    <input type="text" class="form-control" name="descrption" value="<?php echo $datauser["discrption"];?>">
+                    <label for="exampleInputEmail1" class="form-label">discrption</label>
+                    <input type="text" class="form-control" name="descrption_edit" value="<?php echo $datauser["discrption"];?>">
                
                  </div>
              
+                 <input type="hidden" name="id" value="<?php echo $datauser["id"]; ?>">
 
                 <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Role</label>
+                <label for="exampleInputPassword1" class="form-label">Status</label>
 
-                <select class="form-select" aria-label="Default select example" class="w-20" name="status" autofocus>
+                <select class="form-select" aria-label="Default select example" class="w-20" name="status_edit" autofocus>
                   <option selected>Choose</option>
                   <option value="visible"  <?php if($datauser["status"] == "visible" ) echo 'selected' ?>>Visible</option>
                   <option value="hidden " <?php if($datauser["status"] == "hidden" ) echo 'selected' ?>>Hidden</option>
@@ -419,19 +420,61 @@ $categoriesCont = $sit->rowCount();
 </div>
 
 <?php
-}elseif($page == "edit-user"){
+}elseif($page == "seveEdit"){
   
-}
-?>
+  
+
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
+  
+      if(isset($_POST["edit-categorie"])){
+  
+        
+          $id =  $_POST["id"];
+        
+  
 
 
+        $title = $_POST["title_edit"];
+        $descrption = $_POST["descrption_edit"];
+        $status = $_POST["status_edit"];
   
-<?php
-
-include 'includes/template/footer.php';
-}else{
-unset($_SESSION['admin']);
   
-  header('Location:login.php');
-}
-?>
+  
+       
+    
+  
+        $updetecategorie = $conn->prepare("UPDATE categories SET title = ? , discrption = ? , status = ?,updete_at = now() WHERE id = ?");
+  
+        $updetecategorie->execute(array( $title,$descrption,$status,$id));
+  
+        $updeteupdetecategorieCount = $updetecategorie->rowCount();
+  
+  
+        if($updeteupdetecategorieCount > 0){
+  
+          header("Location:categories.php");
+          exit();
+        }
+  
+      }
+    
+  
+      
+  
+    
+  
+    }
+  }
+  ?>
+  
+  
+    
+  <?php
+  
+  include 'includes/template/footer.php';
+  }else{
+  unset($_SESSION['admin']);
+    
+    header('Location:login.php');
+  }
+  ?>
