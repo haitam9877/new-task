@@ -16,7 +16,7 @@
           <a class="nav-link" href="categories.php">categories</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">posts</a>
+          <a class="nav-link" href="posts.php">posts</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">	comments</a>
