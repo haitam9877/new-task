@@ -130,7 +130,7 @@ $postsCont = $sit->rowCount();
             <tr>
               <th scope="row"><?php echo $post['id'] ?></th>
               <td>
-                <img src="includes/upload/images/<?php echo $post['image'] ?>" alt="" width="90" height="90">
+                <?php echo "<img src='includes/upload/images/". $post["image"] ."' width='80' height='80'>"   ?>
               </td>
               <td><?php echo $post['title'] ?></td>
               <td><?php echo $post['discrption'] ?></td>
@@ -243,7 +243,7 @@ $postsCont = $sit->rowCount();
     <p><?php echo $_SESSION["userid"] ?></p>
     <h3  class=" mt-5 mb-5">Add post</h3>
     <div class=" w-50 ">
-            <form method="post" action="?page=sevePost">
+            <form method="post" action="?page=sevePost" enctype="multipart/form-data">
 
             <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Image</label>
@@ -266,7 +266,7 @@ $postsCont = $sit->rowCount();
                 <label for="exampleInputPassword1" class="form-label">Categoire_id</label>
 
                 <select class="form-select" aria-label="Default select example" class="w-20" name="categoire_id">
-                  <option selected>Choose</option>
+                  <option selected >Choose</option>
 
                   <?php
                   $sit = $conn->prepare("SELECT * FROM categories");
@@ -325,6 +325,13 @@ $postsCont = $sit->rowCount();
         $categoire_id = $_POST["categoire_id"];
         $user_id = $_POST["user_id"];
         $status = $_POST["status"];
+
+
+        $imageName = $_FILES["image"]["name"];
+        $imageType = $_FILES["image"]["type"];
+        $imageTmpName= $_FILES["image"]["tmp_name"];
+        $imageSize = $_FILES["image"]["size"];
+        $typeOfAcssept = array("jpg","jpeg","png","gif","webp");
        
 
 
@@ -349,25 +356,56 @@ $postsCont = $sit->rowCount();
             $formPostsError[] = "status is required";
         }
 
+        if(!empty($user_id)){
+
+          $user_id = $user_id;
+      }else{
+          $formPostsError[] = "user_id is required";
+      }
+
+      if(!empty($categoire_id)){
+
+        $categoire_id = $categoire_id;
+    }else{
+        $formPostsError[] = "categoire_id is required";
+    }
+
       
 
+       if(empty($formPostsError)){
+
        
+        $finalImg = rand(0,1000) .  "_"  . $imageName;
 
-          $sita = $conn->prepare("INSERT INTO categories (title, discrption, status,created_at) 
-        VALUES (:ztitle, :zdiscrption,  :zstatus,  NOW())");
-          $sita->execute(array(
-            ':ztitle' => $title,
-            ':zdiscrption'    => $descrption,
-            ':zstatus'   => $status,
-          ));
+        move_uploaded_file($imageTmpName ,"includes/upload/images/".$finalImg);
 
-          if($sita->rowCount() > 0){
-  
-            $_SESSION['message'] = "Add Categorie successfully";
-            header("Location:categories.php");
-            exit();
 
-          } 
+
+        $stmt = $conn->prepare("INSERT INTO posts (image,title,discrption,categoire_id ,user_id ,status) VALUES (:zimage,:ztitle,:zdiscrption,:zcategoire_id,:zuser_id,:zstatus)");
+
+        $stmt->execute(array(
+          'zimage' => $finalImg,
+          'ztitle' => $title,
+          'zdiscrption' => $discrption,
+          'zcategoire_id' => $categoire_id,
+          'zuser_id' => $user_id,
+          'zstatus' => $status
+
+
+        ));
+
+        if($stmt->rowCount() >0){
+
+          $_SESSION['message'] = "Add post successfully";
+          header("Location:posts.php");
+          exit();
+        }
+
+       }else{
+        print_r($formPostsError);
+       }
+
+         
 
 
         
@@ -385,7 +423,7 @@ $postsCont = $sit->rowCount();
 
 
 
-  $sit = $conn->prepare("SELECT * FROM categories WHERE id = ? ");
+  $sit = $conn->prepare("SELECT * FROM posts WHERE id = ? ");
   $sit->execute(array($userid));
 
 
@@ -393,7 +431,7 @@ $postsCont = $sit->rowCount();
 
   if($rows > 0){
 
-    $deletesit = $conn->prepare('DELETE  FROM categories WHERE id = ?');
+    $deletesit = $conn->prepare('DELETE  FROM posts WHERE id = ?');
     $deletesit->execute(array($userid));
 
 
@@ -403,7 +441,7 @@ $postsCont = $sit->rowCount();
     
      
       $_SESSION['message'] = "Deleted successfully";
-      header("Location:categories.php");
+      header("Location:posts.php");
       exit();
     }else{
       $_SESSION['message'] = "";
